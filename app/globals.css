@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+  }
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-white text-gray-900 antialiased;
+    font-family: Inter, system-ui, sans-serif;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus visible ring */
+*:focus-visible {
+  @apply outline-none ring-2 ring-brand-500 ring-offset-2;
+}
