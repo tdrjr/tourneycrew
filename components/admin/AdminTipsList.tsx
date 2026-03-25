@@ -4,7 +4,7 @@ import { useState } from "react";
 import { CheckCircle, XCircle, RotateCcw, ExternalLink } from "lucide-react";
 import { TIP_CATEGORY_EMOJI, TIP_CATEGORY_LABELS } from "@/lib/utils";
 
-interface AdminTip {
+export interface AdminTip {
   id: string;
   category: string;
   title: string;

@@ -1,6 +1,7 @@
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { AdminTipsList } from "@/components/admin/AdminTipsList";
 import type { Metadata } from "next";
+import type { AdminTip } from "@/components/admin/AdminTipsList";
 
 export const metadata: Metadata = { title: "Manage Tips – Admin" };
 
@@ -31,6 +32,13 @@ export default async function AdminTipsPage({ searchParams }: PageProps) {
     .order("created_at", { ascending: false })
     .limit(100);
 
+  // Supabase returns joined relations as arrays — normalise to single object | null
+  const normalised: AdminTip[] = (tips || []).map((t) => ({
+    ...t,
+    tournament: Array.isArray(t.tournament) ? (t.tournament[0] ?? null) : t.tournament,
+    contributor: Array.isArray(t.contributor) ? (t.contributor[0] ?? null) : t.contributor,
+  }));
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
@@ -54,8 +62,8 @@ export default async function AdminTipsPage({ searchParams }: PageProps) {
         </div>
       </div>
 
-      {tips && tips.length > 0 ? (
-        <AdminTipsList tips={tips} />
+      {normalised.length > 0 ? (
+        <AdminTipsList tips={normalised} />
       ) : (
         <div className="text-center py-16 bg-white rounded-xl border border-dashed border-gray-300">
           <p className="text-gray-500">No {validStatus} tips.</p>

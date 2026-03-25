@@ -3,6 +3,8 @@ import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { stripe } from "@/lib/stripe";
 import type Stripe from "stripe";
 
+export const dynamic = "force-dynamic";
+
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 function serviceClient() {
@@ -10,6 +12,15 @@ function serviceClient() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
+}
+
+// Helper — Stripe v20 moved current_period_end; access it safely
+function getPeriodEnd(subscription: Stripe.Subscription): string {
+  // Prefer item-level period end, fall back to billing_cycle_anchor
+  const item = subscription.items?.data?.[0];
+  const ts = (item as unknown as { current_period_end?: number })?.current_period_end
+    ?? subscription.billing_cycle_anchor;
+  return new Date(ts * 1000).toISOString();
 }
 
 export async function POST(request: NextRequest) {
@@ -42,7 +53,7 @@ export async function POST(request: NextRequest) {
         user_id: userId,
         stripe_subscription_id: subscriptionId,
         status: "active",
-        current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+        current_period_end: getPeriodEnd(subscription),
       }, { onConflict: "stripe_subscription_id" });
 
       break;
@@ -59,7 +70,7 @@ export async function POST(request: NextRequest) {
         .from("premium_subscriptions")
         .update({
           status,
-          current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+          current_period_end: getPeriodEnd(subscription),
         })
         .eq("stripe_subscription_id", subscription.id);
 
