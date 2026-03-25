@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+import { BottomNav } from "@/components/layout/BottomNav";
+import { TopNav } from "@/components/layout/TopNav";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -26,15 +26,21 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  let user = null;
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.auth.getUser();
+    user = data.user;
+  } catch {
+    // silently fail if supabase not available
+  }
 
   return (
     <html lang="en">
-      <body className="min-h-screen flex flex-col bg-gray-50">
-        <Header user={user} />
-        <main className="flex-1">{children}</main>
-        <Footer />
+      <body className="min-h-screen bg-gray-50" style={{ maxWidth: 480, margin: "0 auto", position: "relative" }}>
+        <TopNav user={user} />
+        <main className="pb-20">{children}</main>
+        <BottomNav />
       </body>
     </html>
   );

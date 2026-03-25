@@ -41,6 +41,8 @@ async function getRecentTournaments(): Promise<Tournament[]> {
   }
 }
 
+const sportEmoji: Record<string, string> = { volleyball: "🏐", basketball: "🏀", soccer: "⚽", baseball: "⚾" };
+
 export default async function SubmitTipPage({ searchParams }: PageProps) {
   const { tournament: tournamentId } = await searchParams;
   const [preselectedTournament, recentTournaments] = await Promise.all([
@@ -49,52 +51,63 @@ export default async function SubmitTipPage({ searchParams }: PageProps) {
   ]);
 
   return (
-    <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Share a Tip</h1>
-        <p className="text-gray-500">
-          Your experience helps other families prepare. Tips are reviewed before going live.
+    <div>
+      {/* Header */}
+      <div style={{ background: "linear-gradient(135deg, #0D3B13, #1B5E20)", padding: "20px 16px", color: "#fff" }}>
+        <h1 style={{ margin: "0 0 4px", fontSize: 22, fontWeight: 900, fontFamily: "'Trebuchet MS', sans-serif" }}>
+          ✏️ Share a Tip
+        </h1>
+        <p style={{ margin: 0, fontSize: 13, opacity: 0.85 }}>
+          Help other families at {preselectedTournament ? preselectedTournament.name : "a tournament"}
         </p>
       </div>
 
-      {/* Tournament selector (if no preselected) */}
-      {!preselectedTournament && recentTournaments.length > 0 && (
-        <div className="mb-8 p-5 bg-amber-50 border border-amber-200 rounded-xl">
-          <p className="text-sm font-medium text-amber-900 mb-3">
-            📍 First, select the tournament you attended:
-          </p>
-          <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
-            {recentTournaments.map((t) => (
-              <a
-                key={t.id}
-                href={`/tips/submit?tournament=${t.id}`}
-                className="flex items-center justify-between p-3 bg-white rounded-lg border border-amber-100 hover:border-brand-300 hover:shadow-sm transition-all text-sm"
-              >
-                <div>
-                  <div className="font-medium text-gray-900">{t.name}</div>
-                  <div className="text-gray-400">{t.city}, {t.state}</div>
-                </div>
-                <span className="text-gray-400">→</span>
-              </a>
-            ))}
+      <div style={{ padding: "16px" }}>
+        {/* Tournament selector */}
+        {!preselectedTournament && recentTournaments.length > 0 && (
+          <div style={{ marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#616161", marginBottom: 10 }}>
+              📍 First, select the tournament:
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 260, overflowY: "auto" }}>
+              {recentTournaments.map(t => (
+                <a key={t.id} href={`/tips/submit?tournament=${t.id}`} style={{
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  padding: "12px 14px", background: "#fff", borderRadius: 12,
+                  border: "1px solid #E0E0E0", textDecoration: "none",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+                }}>
+                  <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                    <span style={{ fontSize: 22 }}>{sportEmoji[t.sport] || "🏆"}</span>
+                    <div>
+                      <div style={{ fontWeight: 700, fontSize: 14, color: "#212121" }}>{t.name}</div>
+                      <div style={{ fontSize: 12, color: "#9E9E9E" }}>{t.city}, {t.state}</div>
+                    </div>
+                  </div>
+                  <span style={{ fontSize: 18, color: "#BDBDBD" }}>›</span>
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {preselectedTournament ? (
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-          <TipForm
-            tournamentId={preselectedTournament.id}
-            tournamentName={preselectedTournament.name}
-          />
-        </div>
-      ) : (
-        !recentTournaments.length && (
-          <div className="text-center py-14">
-            <p className="text-gray-500">No upcoming tournaments found. Check back soon!</p>
+        {/* Tip form */}
+        {preselectedTournament ? (
+          <div style={{ background: "#fff", borderRadius: 14, padding: "16px", border: "1px solid #E0E0E0" }}>
+            <TipForm
+              tournamentId={preselectedTournament.id}
+              tournamentName={preselectedTournament.name}
+            />
           </div>
-        )
-      )}
+        ) : (
+          !recentTournaments.length && (
+            <div style={{ textAlign: "center", padding: "40px 20px" }}>
+              <div style={{ fontSize: 40, marginBottom: 10 }}>🏆</div>
+              <p style={{ margin: 0, fontSize: 14, color: "#9E9E9E" }}>No upcoming tournaments found. Check back soon!</p>
+            </div>
+          )
+        )}
+      </div>
     </div>
   );
 }

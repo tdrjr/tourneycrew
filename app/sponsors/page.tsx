@@ -1,130 +1,93 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Sponsor TourneyCrew | Reach Sports Families",
-  description: "Reach thousands of youth sports families every tournament weekend. Sponsor TourneyCrew to put your business in front of the right audience.",
+  description: "Reach thousands of youth sports families every tournament weekend.",
 };
 
-const TIERS = [
+const tiers = [
   {
-    name: "Bronze",
-    price: "$150/mo",
-    emoji: "🥉",
-    color: "border-orange-300 bg-orange-50",
-    headerColor: "text-orange-700",
-    features: [
-      "Logo on relevant tournament pages",
-      "Listed in city business directory",
-      "1 sport or city targeting",
-    ],
+    name: "Premium", price: 500, color: "#FFB300", bg: "#FFFDE7", icon: "👑", best: true,
+    perks: ["Top banner above the fold", "Exclusive category sponsorship", "Full logo + description + offer", "Featured in tournament emails", "Social media shoutout", "Analytics dashboard"],
   },
   {
-    name: "Silver",
-    price: "$300/mo",
-    emoji: "🥈",
-    color: "border-gray-400 bg-gray-50",
-    headerColor: "text-gray-700",
-    features: [
-      "Everything in Bronze",
-      "Highlighted placement in search results",
-      "3 city/sport targeting combinations",
-      "Monthly performance report",
-    ],
+    name: "Featured", price: 300, color: "#1B5E20", bg: "#F1F8E9", icon: "⭐", best: false,
+    perks: ["Featured section placement", "Logo + description + offer", "Included in guide emails", "Social media mention"],
   },
   {
-    name: "Gold",
-    price: "$500/mo",
-    emoji: "🥇",
-    color: "border-amber-400 bg-amber-50 shadow-md",
-    headerColor: "text-amber-700",
-    badge: "Most Popular",
-    features: [
-      "Everything in Silver",
-      "Banner on homepage",
-      "Priority placement on all tournament pages",
-      "Unlimited targeting",
-      "Dedicated account manager",
-    ],
+    name: "Standard", price: 150, color: "#616161", bg: "#FAFAFA", icon: "📌", best: false,
+    perks: ["Sponsor directory listing", "Business name + offer text", "Link to website", "Basic analytics"],
   },
-];
-
-const STATS = [
-  { label: "Tournaments indexed",    value: "1,000+" },
-  { label: "Families reached/month", value: "50K+" },
-  { label: "States covered",         value: "48" },
-  { label: "Avg session length",     value: "7 min" },
 ];
 
 export default function SponsorsPage() {
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
-      {/* Hero */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
-          Reach families, right when it matters
+    <div>
+      <div style={{ background: "linear-gradient(135deg, #0D3B13, #1B5E20)", padding: "28px 16px", color: "#fff", textAlign: "center" }}>
+        <h1 style={{ margin: "0 0 8px", fontSize: 24, fontWeight: 900, fontFamily: "'Trebuchet MS', sans-serif" }}>
+          Reach Tournament Families
         </h1>
-        <p className="text-lg text-gray-500 max-w-2xl mx-auto">
-          TourneyCrew is the go-to guide for tournament weekends. Parents are actively looking for restaurants, hotels, and local services — be there when they search.
+        <p style={{ margin: 0, fontSize: 14, opacity: 0.85, lineHeight: 1.5 }}>
+          Thousands of families search for food, activities & services every tournament weekend.
         </p>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-14">
-        {STATS.map((s) => (
-          <div key={s.label} className="text-center">
-            <div className="text-3xl font-extrabold text-brand-700">{s.value}</div>
-            <div className="text-sm text-gray-500 mt-1">{s.label}</div>
+      <div style={{ display: "flex", gap: 8, padding: "16px", justifyContent: "center" }}>
+        {[
+          { num: "168", label: "Tournaments" },
+          { num: "50K+", label: "Families/mo" },
+          { num: "92%", label: "Mobile" },
+        ].map((stat, i) => (
+          <div key={i} style={{ flex: 1, background: "#fff", borderRadius: 12, padding: "14px 8px", textAlign: "center", border: "1px solid #E0E0E0" }}>
+            <div style={{ fontSize: 22, fontWeight: 900, color: "#1B5E20" }}>{stat.num}</div>
+            <div style={{ fontSize: 11, color: "#9E9E9E", fontWeight: 600 }}>{stat.label}</div>
           </div>
         ))}
       </div>
 
-      {/* Tiers */}
-      <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">Sponsorship Tiers</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
-        {TIERS.map((tier) => (
-          <div
-            key={tier.name}
-            className={`relative rounded-2xl border-2 p-6 flex flex-col ${tier.color}`}
-          >
-            {tier.badge && (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                {tier.badge}
-              </span>
+      <div style={{ padding: "0 16px 24px" }}>
+        {tiers.map((tier, i) => (
+          <div key={i} style={{
+            background: tier.bg, borderRadius: 16, padding: "20px", marginBottom: 12,
+            border: tier.best ? `2px solid ${tier.color}` : "1px solid #E0E0E0",
+            boxShadow: tier.best ? "0 4px 20px rgba(255,179,0,0.15)" : "0 1px 4px rgba(0,0,0,0.04)",
+            position: "relative", overflow: "hidden",
+          }}>
+            {tier.best && (
+              <div style={{ position: "absolute", top: 12, right: -28, background: tier.color, color: "#fff", padding: "4px 32px", fontSize: 10, fontWeight: 800, transform: "rotate(45deg)", letterSpacing: 1 }}>
+                BEST
+              </div>
             )}
-            <div className="text-3xl mb-2">{tier.emoji}</div>
-            <h3 className={`text-xl font-bold mb-1 ${tier.headerColor}`}>{tier.name}</h3>
-            <p className="text-2xl font-extrabold text-gray-900 mb-4">{tier.price}</p>
-            <ul className="space-y-2 flex-1">
-              {tier.features.map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm text-gray-700">
-                  <span className="text-green-500 mt-0.5">✓</span>
-                  {f}
-                </li>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+              <div>
+                <div style={{ fontSize: 18, marginBottom: 2 }}>{tier.icon}</div>
+                <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: tier.color }}>{tier.name}</h3>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <div style={{ fontSize: 28, fontWeight: 900, color: "#212121" }}>${tier.price}</div>
+                <div style={{ fontSize: 11, color: "#9E9E9E" }}>per tournament</div>
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {tier.perks.map((perk, j) => (
+                <div key={j} style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 13, color: "#616161" }}>
+                  <span style={{ color: "#4CAF50", fontWeight: 700 }}>✓</span> {perk}
+                </div>
               ))}
-            </ul>
-            <a
-              href={`mailto:sponsors@tourneycrew.com?subject=${tier.name} Sponsorship Inquiry`}
-              className="mt-6 block text-center py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-800 transition-colors"
-            >
-              Get Started
+            </div>
+            <a href={`mailto:sponsors@tourneycrew.com?subject=${tier.name} Sponsorship Inquiry`} style={{
+              display: "block", width: "100%", marginTop: 16, padding: "12px", borderRadius: 10, border: "none",
+              background: tier.best ? tier.color : tier.color === "#616161" ? "#424242" : "#1B5E20",
+              color: "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.15)", textDecoration: "none", textAlign: "center",
+            }}>
+              Get Started — ${tier.price}
             </a>
           </div>
         ))}
-      </div>
-
-      {/* CTA */}
-      <div className="bg-brand-700 text-white rounded-2xl p-8 text-center">
-        <h2 className="text-2xl font-bold mb-3">Questions? Let&apos;s chat.</h2>
-        <p className="text-brand-200 mb-6">
-          We&apos;ll work with you to find the right fit and targeting strategy for your business.
+        <p style={{ textAlign: "center", fontSize: 12, color: "#BDBDBD", marginTop: 8 }}>
+          Questions? Email <a href="mailto:sponsors@tourneycrew.com" style={{ color: "#1B5E20" }}>sponsors@tourneycrew.com</a>
         </p>
-        <a
-          href="mailto:sponsors@tourneycrew.com"
-          className="inline-flex px-6 py-3 bg-white text-brand-700 font-semibold rounded-xl hover:bg-brand-50 transition-colors"
-        >
-          Email us →
-        </a>
       </div>
     </div>
   );

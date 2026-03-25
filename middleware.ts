@@ -8,7 +8,6 @@ export async function middleware(request: NextRequest) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-    // If env vars are missing, just pass through
     if (!supabaseUrl || !supabaseAnonKey) {
       return supabaseResponse;
     }
@@ -18,7 +17,7 @@ export async function middleware(request: NextRequest) {
         getAll() {
           return request.cookies.getAll();
         },
-        setAll(cookiesToSet) {
+        setAll(cookiesToSet: { name: string; value: string; options?: Record<string, unknown> }[]) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           );
@@ -30,10 +29,8 @@ export async function middleware(request: NextRequest) {
       },
     });
 
-    // Refresh session
     const { data: { user } } = await supabase.auth.getUser();
 
-    // Protect admin routes
     if (request.nextUrl.pathname.startsWith("/admin")) {
       if (!user) {
         const url = request.nextUrl.clone();
@@ -45,7 +42,6 @@ export async function middleware(request: NextRequest) {
 
     return supabaseResponse;
   } catch {
-    // If middleware fails for any reason, pass through rather than 500
     return NextResponse.next({ request });
   }
 }
