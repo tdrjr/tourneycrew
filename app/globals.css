@@ -40,3 +40,22 @@ html {
 /* Hide scrollbar but keep scroll */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Responsive nav helpers */
+.hidden-mobile { display: flex; }
+.mobile-only { display: none; }
+
+@media (max-width: 767px) {
+  .hidden-mobile { display: none !important; }
+  .mobile-only { display: flex !important; }
+}
+
+/* Desktop content layout: add padding and wider cards */
+@media (min-width: 768px) {
+  /* Hero sections full-width but content centered */
+  .desktop-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+}

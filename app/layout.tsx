@@ -37,10 +37,16 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className="min-h-screen bg-gray-50" style={{ maxWidth: 480, margin: "0 auto", position: "relative" }}>
+      <body className="min-h-screen bg-gray-100">
         <TopNav user={user} />
-        <main className="pb-20">{children}</main>
-        <BottomNav />
+        {/* On mobile: full width. On desktop: centered max-width container */}
+        <main className="pb-16 md:pb-0 max-w-screen-xl mx-auto">
+          {children}
+        </main>
+        {/* Bottom nav only on mobile */}
+        <div className="md:hidden">
+          <BottomNav />
+        </div>
       </body>
     </html>
   );

@@ -125,7 +125,7 @@ export default async function TournamentsPage({ searchParams }: { searchParams: 
             <Link href="/tournaments" style={{ display: "inline-block", marginTop: 12, color: "#1B5E20", fontWeight: 600, textDecoration: "none" }}>Clear filters →</Link>
           </div>
         ) : (
-          tournaments.map(t => <TournamentCard key={t.id} t={t} />)
+          <div className="desktop-grid">{tournaments.map(t => <TournamentCard key={t.id} t={t} />)}</div>
         )}
       </div>
     </div>

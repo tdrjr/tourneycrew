@@ -132,7 +132,7 @@ export default async function HomePage() {
       )}
 
       {/* Tournament list */}
-      <div style={{ padding: "8px 16px 20px" }}>
+      <div style={{ padding: "8px 24px 20px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
           <h2 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: "#212121" }}>Upcoming Tournaments</h2>
           <Link href="/tournaments" style={{ fontSize: 12, color: "#1B5E20", fontWeight: 600, textDecoration: "none" }}>View All →</Link>
@@ -144,7 +144,9 @@ export default async function HomePage() {
             <p style={{ margin: 0, fontSize: 14 }}>No upcoming tournaments yet. Check back soon!</p>
           </div>
         ) : (
-          tournaments.map(t => <TournamentCard key={t.id} tournament={t} />)
+          <div className="desktop-grid">
+            {tournaments.map(t => <TournamentCard key={t.id} tournament={t} />)}
+          </div>
         )}
       </div>
 
